@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<playground version='6.0' target-platform='macos' display-mode='raw'>
+    <pages>
+        <page name='高阶函数'/>
+        <page name='集合类型协议'/>
+        <page name='Struct&amp;Class'/>
+        <page name='可选值'/>
+        <page name='编码&amp;解码'/>
+        <page name='函数'/>
+        <page name='题目'/>
+        <page name='字符串'/>
+    </pages>
+</playground>
