@@ -10,5 +10,6 @@
         <page name='题目'/>
         <page name='字符串'/>
         <page name='UIKit'/>
+        <page name='属性'/>
     </pages>
 </playground>

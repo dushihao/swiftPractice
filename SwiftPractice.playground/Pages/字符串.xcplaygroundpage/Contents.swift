@@ -80,7 +80,6 @@ let sentence = "The quick brown fox jumped over the lazy dog."
 let sentenceWrap =  sentence.wrapper(after: 15)
 print(sentenceWrap)
 
-
 /// 接收多个分隔符的序列作为参数
 extension Collection where Element: Equatable {
     func split<S: Sequence>(separators: S) -> [SubSequence]
@@ -95,5 +94,12 @@ extension Collection where Element: Equatable {
 
 
 // StringProtocol
+let alaboString = "1,2,3,4,5"
+let intArray = alaboString.split(separator: ",").compactMap { (sub) -> Int? in
+    Int(sub)
+}
+alaboString.split(separator: ",").compactMap{
+    Int($0)
+}
 
 //: [Next](@next)
