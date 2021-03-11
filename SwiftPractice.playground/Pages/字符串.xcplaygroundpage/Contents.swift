@@ -94,6 +94,13 @@ extension Collection where Element: Equatable {
 
 
 // StringProtocol
+
+/**
+ “如果你想要扩展 String 为其添加新的功能，将这个扩展放在 StringProtocol 会是一个好主意，这可以保持 String 和 Substring API 的统一性”
+
+ 摘录来自: Chris Eidhof. “Swift 进阶。” Apple Books.
+ */
+
 let alaboString = "1,2,3,4,5"
 let intArray = alaboString.split(separator: ",").compactMap { (sub) -> Int? in
     Int(sub)
@@ -101,5 +108,8 @@ let intArray = alaboString.split(separator: ",").compactMap { (sub) -> Int? in
 alaboString.split(separator: ",").compactMap{
     Int($0)
 }
+
+// String 富文本的使用
+/// 用到 NSAttributedString 和 NSMutableAttributedString
 
 //: [Next](@next)
