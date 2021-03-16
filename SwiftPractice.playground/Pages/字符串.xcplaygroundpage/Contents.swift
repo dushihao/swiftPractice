@@ -112,4 +112,42 @@ alaboString.split(separator: ",").compactMap{
 // String 富文本的使用
 /// 用到 NSAttributedString 和 NSMutableAttributedString
 
+
+// CharacterSet
+
+let favorateEmoji = CharacterSet("👩‍🚒👨‍🚒".unicodeScalars)
+favorateEmoji.contains("🚒") // true
+
+extension String {
+    func words(with charset: CharacterSet = .alphanumerics) -> [Substring] {
+        return self.unicodeScalars.split{
+            !charset.contains($0)
+        }.map(Substring.init) // map 接收了一个闭包 Substring.init: (Substring.UnicodeScalarView) throws -> T) rethrows -> [T]
+    }
+}
+
+let code = "stuct Array<Element>: Collection {}"
+code.words()
+
+
+// 函数是一等功民
+class Foo {
+    var name = "laji"
+    func hello() {
+        print("hi \(name)~~~~~")
+    }
+}
+
+let f = Foo()
+let v = Foo.hello(f)  // () -> ()
+v()
+
+
+// 简单的正则表达式匹配器
+/// 参考《swift 进阶》
+
+// 文本输出流 略
+ 
+// 字符串性能 略
+
 //: [Next](@next)
