@@ -142,4 +142,13 @@ extension SVG {
     }
 }
 
+// 静态派发 & 动态派发
+//var sample = SVG()
+//sample.addCircle(center: .zero, radius: 20, fill: .red)
+//print(sample)
+
+var sample: Drawing = SVG()
+sample.addCircle(center: .zero, radius: 20, fill: .blue)
+print(sample)
+
 //: [Next](@next)
