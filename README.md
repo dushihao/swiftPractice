@@ -2,6 +2,8 @@
 
 # Swift 进阶
 
+看书过程中，把书中的🌰抄了一遍，加深记忆，并不全，倒过来在看的时候，能补的会补上。
+
 - [高阶函数](https://github.com/dushihao/swiftPractice/blob/main/SwiftPractice.playground/Pages/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0.xcplaygroundpage/Contents.swift)
 - [集合类型协议](https://github.com/dushihao/swiftPractice/blob/main/SwiftPractice.playground/Pages/%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E5%8D%8F%E8%AE%AE.xcplaygroundpage/Contents.swift)
 - [可选值](https://github.com/dushihao/swiftPractice/blob/main/SwiftPractice.playground/Pages/%E5%8F%AF%E9%80%89%E5%80%BC.xcplaygroundpage/Contents.swift)
