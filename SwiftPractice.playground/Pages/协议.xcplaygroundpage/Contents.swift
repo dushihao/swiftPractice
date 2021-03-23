@@ -151,4 +151,17 @@ var sample: Drawing = SVG()
 sample.addCircle(center: .zero, radius: 20, fill: .blue)
 print(sample)
 
+// 协议的两种类型
+/*:
+1、带有关联类型的协议 2、 普通协议
+参考：[第十章：协议 Protocol Protocol-Oriented Programming](https://github.com/Liaoworking/Advanced-Swift/blob/master/%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%8D%8F%E8%AE%AE/10.2%20%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8B%20TwoTypesofProtocols.md)
+ 
+*/
+
+// 类型抹除/类型擦除/类型抹消 隐藏内部的实现，保证接口的简介
+//: [Swift 类型擦除](https://swift.gg/2018/10/11/friday-qa-2017-12-08-type-erasure-in-swift/)
+
+// TODO:Dush
+
+
 //: [Next](@next)
