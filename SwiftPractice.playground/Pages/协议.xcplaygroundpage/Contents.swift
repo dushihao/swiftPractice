@@ -3,7 +3,7 @@
 import UIKit
 
 
-// 面向协议编程
+//: ## 一、面向协议编程
 protocol Drawing {
     mutating func addEllipse(rect: CGRect, fill: UIColor)
     mutating func addRectangle(rect: CGRect, fill: UIColor)
@@ -119,7 +119,7 @@ context.addRectangle(rect: rect1, fill: .yellow)
 context.addEllipse(rect: rect2, fill: .blue)
 print(context)
 
-// 协议扩展
+//: ## 二、协议扩展
 extension Drawing {
     mutating func addCircle(center: CGPoint, radius: CGFloat, fill: UIColor) {
         let diameter = radius * 2
@@ -151,17 +151,168 @@ var sample: Drawing = SVG()
 sample.addCircle(center: .zero, radius: 20, fill: .blue)
 print(sample)
 
-// 协议的两种类型
+//: ## 三、协议的两种类型
 /*:
-1、带有关联类型的协议 2、 普通协议
-参考：[第十章：协议 Protocol Protocol-Oriented Programming](https://github.com/Liaoworking/Advanced-Swift/blob/master/%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%8D%8F%E8%AE%AE/10.2%20%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8B%20TwoTypesofProtocols.md)
- 
+1、带有关联类型的协议（可以看做是泛型协议） 2、 普通协议
+参考：
+ - [第十章：协议 Protocol Protocol-Oriented Programming](https://github.com/Liaoworking/Advanced-Swift/blob/master/%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%8D%8F%E8%AE%AE/10.2%20%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8B%20TwoTypesofProtocols.md)
+ - [Swift 关联类型](https://swift.gg/2016/08/01/swift-associated-types/)
 */
 
-// 类型抹除/类型擦除/类型抹消 隐藏内部的实现，保证接口的简介
+struct MyIdType : Hashable {
+    let id: String
+}
+
+/**
+ @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+ public protocol Identifiable {
+
+     /// A type representing the stable identity of the entity associated with
+     /// an instance.
+     associatedtype ID : Hashable
+
+     /// The stable identity of the entity associated with this instance.
+     var id: Self.ID { get }
+ }
+
+ */
+    
+struct A: Identifiable {
+//    这句可以省略
+//    typealias ID = String
+    let id: String
+}
+
+struct B: Identifiable {
+    typealias ID = Int
+    let id: Int
+}
+
+struct C: Identifiable {
+    typealias ID = MyIdType
+    let id: MyIdType
+}
+
+
+
+
+//: ## 四、 类型抹除/类型擦除/类型抹消/Type Erasure
+// 隐藏内部的实现，保证接口的简洁
 //: [Swift 类型擦除](https://swift.gg/2018/10/11/friday-qa-2017-12-08-type-erasure-in-swift/)
 
-// TODO:Dush
+/// IteratorProtocol 是一个关联类型的协议， 是一个不完整的类型
+/// 我们可以将 IteratorProtocol 用作泛型参数的约束处理
+func nextInt<I: IteratorProtocol>(iterator: inout I) -> Int? where I.Element == Int {
+    return iterator.next()
+}
 
+class IteratorStore<I: IteratorProtocol> where I.Element == Int {
+    var iterator: I
+    init(iterator: I) {
+        self.iterator = iterator
+    }
+}
+
+/// 但是这种👆方式有缺点，存储的迭代器的指定类型“泄露”出来了，我们无法表达“元素类型是Int的任意迭代器”，我们无法创建一个数组，让它能同时存储 IteratorStore<ConstantIterator> 和 IteratorStore<FibsIterator> （序列章节）
+
+struct ConstantIterator: IteratorProtocol {
+    func next() -> Int? {
+        return 1
+    }
+}
+
+// 两种方式进行类型抹除
+//: - 封装类
+class IntIterator {
+    var nextImpl: () -> Int?
+    init<I: IteratorProtocol>(_ iterator: I) where I.Element == Int {
+        var iteratorCopy = iterator
+        self.nextImpl = { iteratorCopy.next() }
+    }
+}
+
+extension IntIterator: IteratorProtocol {
+    func next() -> Int? {
+        return nextImpl()
+    }
+}
+
+var iter =  IntIterator(ConstantIterator())
+iter = IntIterator([1,2,3].makeIterator())
+
+// 抽象Int并为迭代器的元素类型添加泛型参数
+class AnyIterator<A>: IteratorProtocol {
+    var nextImpl: () -> A?
+    
+    init<I: IteratorProtocol>(_ iterator: I) where I.Element == A {
+        var iteratorCopy = iterator
+        self.nextImpl = { iteratorCopy.next() }
+    }
+    
+    func next() -> A? {
+        return nextImpl()
+    }
+}
+
+//: - 类继承 使用类继承的方式，使具体的迭代器类型隐藏在子类中
+class IteratorBox<Element>: IteratorProtocol {
+    func next() -> Element? {
+        fatalError("this method is abstract")
+    }
+}
+
+class IteratorBoxHelper<I: IteratorProtocol>: IteratorBox<I.Element> {
+    var iterator: I
+    init(iterator: I) {
+        self.iterator = iterator
+    }
+    
+    override func next() -> I.Element? {
+        return iterator.next()
+    }
+}
+
+let iter1: IteratorBox<Int> = IteratorBoxHelper(iterator: ConstantIterator())
+
+
+//: ## 带有 Self 的协议
+class IntegerRef: NSObject {
+    let int: Int
+    init(_ int: Int) {
+        self.int = int
+    }
+    
+    static func ==(lhs: IntegerRef, rhs: IntegerRef) -> Bool {
+        return lhs.int == rhs.int
+    }
+}
+
+/*:
+ - Note: “== 运算符被定义为了类型的静态函数。换句话说，它不是成员函数，对该函数的调用将被静态派发。与成员函数不同，我们不能对它进行重写。如果你有一个实现了 Equatable 的类 (比如 NSObject)，你可能会在创建子类时遇到预想之外的行为”
+ 
+ 摘录来自: Chris Eidhof. “Swift 进阶。” Apple Books.
+ */
+
+let one = IntegerRef(1)
+let otherOne = IntegerRef(1)
+one == otherOne // true
+
+let two: NSObject = IntegerRef(2)
+let otherTwo: NSObject = IntegerRef(2)
+two == otherTwo // false
+
+
+//: ## 协议内幕
+
+func f<C: CustomStringConvertible>(_ x: C) -> Int {
+    return MemoryLayout.size(ofValue: x)
+}
+
+func g(_ x: CustomStringConvertible) -> Int {
+    return MemoryLayout.size(ofValue: x)
+}
+
+f(5) // 8
+g(5) // 40
 
 //: [Next](@next)
