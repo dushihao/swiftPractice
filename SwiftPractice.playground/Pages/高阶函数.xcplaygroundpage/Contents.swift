@@ -70,8 +70,8 @@ let resArrMax = arrMax.first.flatMap {
 }
 
 let arrMax1 = [Int]()
-let resArrMax1 = arrMax1.first.flatMap { arrMax.reduce($0, max) }
+let resArrMax1 = arrMax1.first.flatMap { arrMax.reduce($0, max) } // resArrMax1 可选值
 
-print(resArrMax!, resArrMax1)
+print(resArrMax!, resArrMax1 as Any)
 
 //: [Next](@next)

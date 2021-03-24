@@ -24,7 +24,7 @@ for case let i? in maybeInts {
 let s1: String?? = nil // nil
 (s1 ?? "inner") ?? "outer" // inner
 let s2: String?? = .some(nil) // Optional(nil)
-s2 ?? "inner"
+s2 ?? "inner" // nil
 (s2 ?? "inner") ?? "outer" // outer”
  
 

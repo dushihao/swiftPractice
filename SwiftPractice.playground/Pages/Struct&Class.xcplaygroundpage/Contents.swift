@@ -87,7 +87,7 @@ class Human {
 
 var human: Human! = Human()
 print(CFGetRetainCount(human)) // 2
-let code = {[human] in // 产生强引用
+let code = { [human] in // 产生强引用
     print(human!.lanuage)
 }
 print(CFGetRetainCount(human)) // 输出为3
